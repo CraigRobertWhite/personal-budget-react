@@ -24,9 +24,12 @@ export default class Home extends React.Component{
 
     async getExpenses() {
         try {
-            await axios.get('/budget').data.expenses?.forEach(expense => {
-                this.chartData.datasets[0].data.push(expense.amount);
-                this.chartData.labels.push(expense.type);
+            const response = await axios.get('http://localhost:3000/budget');
+
+            // eslint-disable-next-line no-unused-expressions
+            response.data.expenses?.forEach(expense => {
+                this.state.chartData.datasets[0].data.push(expense.amount);
+                this.state.chartData.labels.push(expense.type);
             });
         } catch (error) {
             console.log(error)
@@ -37,7 +40,7 @@ export default class Home extends React.Component{
         let context = document.getElementById('budget-chart');
         new Chart(context, {
             type: 'doughnut',
-            data: this.chartData
+            data: this.state.chartData
         });
     };
 
